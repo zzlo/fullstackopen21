@@ -1,0 +1,16 @@
+note over selain:
+Save-napin painallus suorittaa tapahtumankäsittelijän,
+joka estää lomakkeen lähetyksen oletusarvoisen toiminnan, minkä
+jälkeen se luo käyttäjän syöttämän muistiinpanon, lisää sen     
+muistiinpanojen listaan, tulostaa listan näytölle ja lähettää sen 
+palvelimelle
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+selain-->palvelin: {content: "moi", date: "2019-10-04T09:35:22.597Z"}
+palvelin-->selain: 201 CREATED 
+
+note over selain:
+kun selain vastaanottaa palvelimelta statuskoodin, 
+js-koodi tulostaa konsoliin {"message":"note created"}
+end note
