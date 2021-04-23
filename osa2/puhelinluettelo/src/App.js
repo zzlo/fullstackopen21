@@ -61,15 +61,21 @@ const App = () => {
     } else {
       numberService
         .create(personObject)
-        .then(person => setPersons(persons.concat(person)))
-      
-      setMessage(`Added ${newName}`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+        .then(person => {
+          setPersons(persons.concat(person))
+          setMessage(`Added ${newName}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
+        .catch(error => {
+          setMessage(`${error.response.data.error}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
       setNewName('')
       setNewNumber('')
-
     }
   }
 
