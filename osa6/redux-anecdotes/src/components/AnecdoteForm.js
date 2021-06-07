@@ -1,6 +1,9 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
-const AnecdoteForm = ( {dispatch} ) => {
+const AnecdoteForm = () => {
+    const dispatch = useDispatch()
+
     const generateId = () => {
         Number((Math.random() * 1000000).toFixed(0))
     }
