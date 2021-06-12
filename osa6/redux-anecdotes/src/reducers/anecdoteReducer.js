@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -25,14 +27,13 @@ const anecdoteReducer = (state = [], action) => {
 
   switch (action.type) {
     case 'VOTE':
-      const id = action.data.id
-      const anecdoteToChange = state.find(n => n.id === id)
+      const anecdoteToChange = action.data
       const changedAnecdote = {
         ...anecdoteToChange,
         votes: anecdoteToChange.votes + 1
       }
       
-      return state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote).sort((anecdote, compareAnecdote) => compareAnecdote.votes - anecdote.votes)
+      return state.map(anecdote => anecdote.id !== action.data.id ? anecdote : changedAnecdote).sort((anecdote, compareAnecdote) => compareAnecdote.votes - anecdote.votes)
     case 'NEW_ANECDOTE':
       const anecdote = {
         content: action.data.content,
@@ -42,23 +43,39 @@ const anecdoteReducer = (state = [], action) => {
 
       return state.concat(anecdote)
     case 'INIT_ANECDOTES':
-      return action.data
+      return action.data.sort((anecdote, compareAnecdote) => compareAnecdote.votes - anecdote.votes)
     default:
     return state
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes,
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      data: anecdotes,
+    })
   }
 }
 
-export const createAnecdote = (data) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data,
+export const createAnecdote = content => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote,
+    })
+  }
+}
+
+export const voteAnecdote = anecdote => {
+  return async dispatch => {
+    await anecdoteService.addVote(anecdote)
+    dispatch({
+      type: 'VOTE',
+      data: anecdote,
+    })
   }
 }
 
