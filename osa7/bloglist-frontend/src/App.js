@@ -6,25 +6,25 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { notificationChange, notificationRemove } from './reducers/notificationReducer'
+import { createBlog, initializeBlogs, removeBlog, voteBlog } from './reducers/blogReducer'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const blogs = useSelector(({ blog }) => blog)
 
   const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
-    )
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -77,11 +77,7 @@ const App = () => {
 
   const handleCreation = async (blogObject) => {
     try {
-      await blogService.createBlog(blogObject)
-      blogObject.id = blogObject.title
-      blogObject.user = user
-      const sortedBlogs = blogs.concat(blogObject).sort((a, b) => b.likes - a.likes)
-      setBlogs(sortedBlogs)
+      dispatch(createBlog(blogObject))
       blogFormRef.current.toggleVisibility()
       dispatch(notificationChange('a new blog created succesfully'))
       setTimeout(() => {
@@ -96,13 +92,8 @@ const App = () => {
   }
 
   const handleUpdating = async blogObject => {
-    const newBlog = { ...blogObject, likes: blogObject.likes + 1 }
-
     try {
-      await blogService.updateBlog(newBlog)
-      const filteredBlogs = blogs.filter(blog => blog.id !== blogObject.id).concat(newBlog)
-      const sortedBlogs = filteredBlogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(sortedBlogs)
+      dispatch(voteBlog(blogObject))
     } catch (exception) {
       console.log(exception)
     }
@@ -119,10 +110,7 @@ const App = () => {
 
   const handleDeletion = async (id) => {
     try {
-      await blogService.deleteBlog(id)
-      const filteredBlogs = blogs.filter(blog => blog.id !== id)
-      const sortedBlogs = filteredBlogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(sortedBlogs)
+      dispatch(removeBlog(id))
     } catch (exception) {
       console.log(exception)
     }
