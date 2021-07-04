@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/60522839a1faf447e8cb76b5
+Content-Type: application/json
+
+{
+    "author": "mauri pekkarinen",
+    "title": "the life of mauri",
+    "url": "keskusta.com",
+    "likes": 72
+}
