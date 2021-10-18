@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtpcmFodmkiLCJpZCI6IjYwZTEwNzQyNjZlMzkxMjlhMDgxZjI2MSIsImlhdCI6MTYyNTQzOTIzNX0.iK-CizHFV95nX9Vt8s_36_kr-ErhroBGh-prgceB7NI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtpcmFodmkiLCJpZCI6IjYwNmFkOTAzMDMzN2VmMzhjODc0ZjllZSIsImlhdCI6MTYxNzYxNTEzMn0.vvbF5P0McSfd1pLp5by_MvclgmS7tMpQLvrYmKHeb-A
 
 {
     "title": "shiisaa",
     "author": "parana",
     "url": "fksodfkpo.com",
+    "likes": 55
 }
